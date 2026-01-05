@@ -26,6 +26,13 @@ let pool;
 
 async function initializeDatabase() {
   try {
+    // Debug: Log environment variables (remove passwords in production)
+    console.log('🔍 Database Configuration:');
+    console.log('DB_HOST:', process.env.DB_HOST || 'localhost (default)');
+    console.log('DB_USER:', process.env.DB_USER || 'root (default)');
+    console.log('DB_NAME:', process.env.DB_NAME || 'plastiwood_inventory (default)');
+    console.log('DB_PASSWORD:', process.env.DB_PASSWORD ? '***SET***' : 'EMPTY (default)');
+    
     pool = mysql.createPool({
       host: process.env.DB_HOST || 'localhost',
       user: process.env.DB_USER || 'root',
