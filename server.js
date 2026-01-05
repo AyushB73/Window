@@ -26,18 +26,27 @@ let pool;
 
 async function initializeDatabase() {
   try {
-    // Debug: Log environment variables (remove passwords in production)
+    // Support both Railway variables and custom variables
+    const dbHost = process.env.MYSQLHOST || process.env.DB_HOST || 'localhost';
+    const dbUser = process.env.MYSQLUSER || process.env.DB_USER || 'root';
+    const dbPassword = process.env.MYSQLPASSWORD || process.env.DB_PASSWORD || '';
+    const dbName = process.env.MYSQLDATABASE || process.env.DB_NAME || 'plastiwood_inventory';
+    const dbPort = process.env.MYSQLPORT || process.env.DB_PORT || 3306;
+    
+    // Debug: Log environment variables
     console.log('🔍 Database Configuration:');
-    console.log('DB_HOST:', process.env.DB_HOST || 'localhost (default)');
-    console.log('DB_USER:', process.env.DB_USER || 'root (default)');
-    console.log('DB_NAME:', process.env.DB_NAME || 'plastiwood_inventory (default)');
-    console.log('DB_PASSWORD:', process.env.DB_PASSWORD ? '***SET***' : 'EMPTY (default)');
+    console.log('Host:', dbHost);
+    console.log('User:', dbUser);
+    console.log('Database:', dbName);
+    console.log('Port:', dbPort);
+    console.log('Password:', dbPassword ? '***SET***' : 'EMPTY');
     
     pool = mysql.createPool({
-      host: process.env.DB_HOST || 'localhost',
-      user: process.env.DB_USER || 'root',
-      password: process.env.DB_PASSWORD || '',
-      database: process.env.DB_NAME || 'plastiwood_inventory',
+      host: dbHost,
+      user: dbUser,
+      password: dbPassword,
+      database: dbName,
+      port: dbPort,
       waitForConnections: true,
       connectionLimit: 10,
       queueLimit: 0,
